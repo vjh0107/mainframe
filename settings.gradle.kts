@@ -1,32 +1,48 @@
-rootProject.name = "spring-bukkit-build"
+rootProject.name = "mainframe"
 
-includeProjects(file("spring-bukkit-project"))
+includeBuild("build-logic")
 
-fun includeProjects(projectDir: File) {
-    projectDir.listFiles()?.forEach { projectFile ->
-        val projectName = ":${projectFile.name}"
-        include(projectName)
-        project(projectName).projectDir = projectFile
-    }
+include(":gradle-plugin")
+include(":bom")
+
+include(":core")
+include(":exposed")
+include(":brigadier")
+
+include(":paper", file("platforms/paper"))
+include(":paper-brigadier", file("platforms/paper-brigadier"))
+include(":velocity", file("platforms/velocity"))
+
+fun include(name: String, path: File) {
+    include(name)
+    project(name).projectDir = path
 }
 
 pluginManagement {
     repositories {
-        mavenCentral()
-        gradlePluginPortal()
+        maven("https://junhyung.nexus/")
+    }
+    plugins {
+        id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
     }
 }
 
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-
     repositories {
-        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://junhyung.nexus/")
     }
 
     versionCatalogs {
-        create("libs")
+        create("conventions") {
+            file("build-logic/convention/src/main/kotlin/kr/junhyung/mainframe/convention").listFiles {
+                    file -> file.name.endsWith(".gradle.kts")
+            }!!.forEach { file ->
+                val pluginName = file.name.removeSuffix(".gradle.kts")
+                plugin(pluginName.removeSuffix("-convention"), "kr.junhyung.mainframe.convention.$pluginName").version("")
+            }
+        }
     }
 }
 

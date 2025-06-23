@@ -1,12 +1,54 @@
 [versions]
-spring-boot = "3.2.4"
-bukkit = "1.20.4-R0.1-SNAPSHOT"
+kotlin = "2.0.21"
+spring-boot = "3.4.5"
+spring-dependency-management = "1.1.7"
+kotlinx-coroutines = "1.10.2"
+paper = "1.20.1-R0.1-SNAPSHOT"
+paper-v21 = "1.21.1-R0.1-SNAPSHOT"
+brigadier = "1.0.18"
+
+adventure = "4.14.0"
+velocity = "3.4.0-SNAPSHOT"
+plugin-publish = "1.3.1"
+exposed = "0.61.0"
+hikaricp = "6.3.0"
+mysql-connector = "9.3.0"
+
+shadow = "8.3.6"
 
 [libraries]
+kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
+
+paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
+paper-api-v21 = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper-v21" }
+brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
+
+velocity-api = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity" }
+adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
+adventure-text-serializer-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
+
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-reactive = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactive", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-reactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines" }
+
 spring-boot-starter = { group = "org.springframework.boot", name = "spring-boot-starter", version.ref = "spring-boot" }
-spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "spring-boot" }
-spigot = { group = "org.spigotmc", name = "spigot-api", version.ref = "bukkit" }
-folia = { group = "dev.folia", name = "folia-api", version.ref = "bukkit" }
+spring-boot-starter-json = { group = "org.springframework.boot", name = "spring-boot-starter-json", version.ref = "spring-boot" }
+spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc", version.ref = "spring-boot" }
+spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
+
+exposed-bom = { group = "org.jetbrains.exposed", name = "exposed-bom", version.ref = "exposed" }
+exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version.ref = "exposed" }
+exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed" }
+exposed-java-time = { group = "org.jetbrains.exposed", name = "exposed-java-time", version.ref = "exposed" }
+exposed-json = { group = "org.jetbrains.exposed", name = "exposed-json", version.ref = "exposed" }
+hikaricp = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikaricp" }
+mysql-connector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysql-connector" }
+
+# plugin dependencies
+shadow = { group = "com.gradleup.shadow", name = "shadow-gradle-plugin", version.ref = "shadow" }
+spring-dependency-management = { group = "io.spring.gradle", name = "dependency-management-plugin", version.ref = "spring-dependency-management" }
 
 [plugins]
-#spring-boot = { id = org.springframework.boot", version.ref = "spring-boot" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+plugin-publish = { id = "com.gradle.plugin-publish", version.ref = "plugin-publish" }

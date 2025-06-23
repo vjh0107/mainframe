@@ -1,24 +1,25 @@
-subprojects {
+plugins {
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.plugin.spring) apply false
+}
+
+allprojects {
     group = extra["project.group"].toString()
     version = extra["project.version"].toString()
+    description = extra["project.description"].toString()
+}
 
-    with(pluginManager) {
-        apply(JavaLibraryPlugin::class)
-        apply(MavenPublishPlugin::class)
-    }
+subprojects {
 
-    extensions.configure<PublishingExtension> {
-        publications {
-            create<MavenPublication>("maven") {
-                groupId = project.group.toString()
-                version = project.version.toString()
-                artifactId = project.name
-                from(components["java"])
-            }
+    if (plugins.hasPlugin(JavaPlugin::class)) {
+        configure<JavaPluginExtension> {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
         }
     }
 
-    extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_17
-    }
+}
+
+if (libs.versions.kotlin.get() != embeddedKotlinVersion) {
+    error("Kotlin version mismatch: ${libs.versions.kotlin.get()} != $embeddedKotlinVersion")
 }

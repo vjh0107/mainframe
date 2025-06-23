@@ -1,0 +1,3 @@
+kr.junhyung.mainframe.velocity.VelocityPluginAutoConfiguration
+kr.junhyung.mainframe.velocity.coroutines.VelocityCoroutinesAutoConfiguration
+kr.junhyung.mainframe.velocity.brigadier.VelocityCommandAutoConfiguration

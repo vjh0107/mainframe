@@ -1,6 +1,0 @@
-name: "testplugin"
-version: 1.0.0
-api-version: 1.13
-main: "kr.junhyung.testplugin.TestPlugin"
-libraries:
-  - "kr.junhyung:spring-bukkit:0.0.1-SNAPSHOT"
