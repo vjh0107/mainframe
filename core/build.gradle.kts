@@ -7,6 +7,7 @@ plugins {
 dependencies {
     api(libs.spring.boot.starter)
     api(libs.spring.boot.starter.json)
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.coroutines.reactive)
