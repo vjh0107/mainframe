@@ -20,6 +20,7 @@ import org.springframework.core.ResolvableType
 import java.nio.file.Path
 import javax.inject.Inject
 import kotlin.jvm.java
+import kotlin.jvm.optionals.getOrNull
 
 public abstract class VelocityMainframePlugin<T> : ApplicationContextFactory, MainframeApplicationCustomizer<VelocityPluginApplicationContext> {
 
@@ -48,8 +49,14 @@ public abstract class VelocityMainframePlugin<T> : ApplicationContextFactory, Ma
         context.apply(this::customizeContext)
         val resourceLoader = PrioritizedResourceLoader(this.javaClass.classLoader)
         pluginContainer.description.dependencies.forEach { dependency ->
-            val dependencyPlugin = proxyServer.pluginManager.getPlugin(dependency.id)
-            val classLoader = dependencyPlugin.get().instance.javaClass.classLoader
+            val dependencyPlugin = proxyServer.pluginManager.getPlugin(dependency.id).getOrNull()
+            if (dependencyPlugin == null) {
+                error("Plugin dependency ${dependency.id} is not loaded")
+            }
+            val classLoader = dependencyPlugin.instance.get().javaClass.classLoader
+            if (classLoader == null) {
+                error("Plugin dependency ${dependency.id} does not have a class loader")
+            }
             resourceLoader.add(classLoader)
         }
         context.setResourceLoader(resourceLoader)
