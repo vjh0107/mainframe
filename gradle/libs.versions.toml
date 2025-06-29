@@ -6,6 +6,7 @@ kotlinx-coroutines = "1.10.2"
 paper = "1.20.1-R0.1-SNAPSHOT"
 paper-v21 = "1.21.1-R0.1-SNAPSHOT"
 brigadier = "1.0.18"
+jackson = "2.18.3"
 
 adventure = "4.14.0"
 velocity = "3.4.0-SNAPSHOT"
@@ -45,6 +46,8 @@ exposed-java-time = { group = "org.jetbrains.exposed", name = "exposed-java-time
 exposed-json = { group = "org.jetbrains.exposed", name = "exposed-json", version.ref = "exposed" }
 hikaricp = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikaricp" }
 mysql-connector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysql-connector" }
+
+jackson-module-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson" }
 
 # plugin dependencies
 shadow = { group = "com.gradleup.shadow", name = "shadow-gradle-plugin", version.ref = "shadow" }
