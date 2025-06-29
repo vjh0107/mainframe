@@ -2,7 +2,7 @@ package kr.junhyung.mainframe.velocity.coroutines
 
 import com.velocitypowered.api.plugin.PluginContainer
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kr.junhyung.mainframe.velocity.MainframePlugin
+import kr.junhyung.mainframe.velocity.VelocityMainframePlugin
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
@@ -24,7 +24,7 @@ public class VelocityCoroutinesAutoConfiguration {
         pluginContainer: PluginContainer
     ): CoroutineExceptionHandler {
         val instance = pluginContainer.instance.get()
-        if (instance !is MainframePlugin<*>) {
+        if (instance !is VelocityMainframePlugin<*>) {
             error("Plugin instance is not of type MainframePlugin")
         }
         return CoroutineExceptionHandler { context, exception ->

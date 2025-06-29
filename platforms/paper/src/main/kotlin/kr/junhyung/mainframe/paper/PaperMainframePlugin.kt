@@ -16,10 +16,17 @@ import org.springframework.core.io.ResourceLoader
 import kotlin.jvm.java
 
 @Suppress("unused")
-public abstract class MainframePlugin<T> : JavaPlugin(), ApplicationContextFactory,
+public abstract class PaperMainframePlugin<T> : JavaPlugin(), ApplicationContextFactory,
     MainframeApplicationCustomizer<PaperPluginApplicationContext> {
 
     private lateinit var applicationContext: ConfigurableApplicationContext
+
+    final override fun getApplicationContext(): PaperPluginApplicationContext? {
+        if (!this::applicationContext.isInitialized) {
+            return null
+        }
+        return this.applicationContext.uncheckedCast()
+    }
 
     final override fun create(webApplicationType: WebApplicationType?): ConfigurableApplicationContext {
         val context = PaperPluginApplicationContext(this)
@@ -68,7 +75,7 @@ public abstract class MainframePlugin<T> : JavaPlugin(), ApplicationContextFacto
     private fun determineMainClass(): Class<*> {
         return ResolvableType
             .forClass(this::class.java)
-            .`as`(MainframePlugin::class.java)
+            .`as`(PaperMainframePlugin::class.java)
             .generics
             .single()
             .resolve() ?: error("Unable to resolve plugin class")

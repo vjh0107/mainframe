@@ -21,7 +21,7 @@ import java.nio.file.Path
 import javax.inject.Inject
 import kotlin.jvm.java
 
-public abstract class MainframePlugin<T> : ApplicationContextFactory, MainframeApplicationCustomizer<VelocityPluginApplicationContext> {
+public abstract class VelocityMainframePlugin<T> : ApplicationContextFactory, MainframeApplicationCustomizer<VelocityPluginApplicationContext> {
 
     @Inject
     protected lateinit var proxyServer: ProxyServer
@@ -34,6 +34,13 @@ public abstract class MainframePlugin<T> : ApplicationContextFactory, MainframeA
     public lateinit var logger: Logger
 
     private lateinit var applicationContext: ConfigurableApplicationContext
+
+    final override fun getApplicationContext(): VelocityPluginApplicationContext? {
+        if (!this::applicationContext.isInitialized) {
+            return null
+        }
+        return this.applicationContext.uncheckedCast()
+    }
 
     override fun create(webApplicationType: WebApplicationType?): ConfigurableApplicationContext {
         val context = VelocityPluginApplicationContext(proxyServer, pluginContainer, dataDirectory.toFile())
@@ -81,7 +88,7 @@ public abstract class MainframePlugin<T> : ApplicationContextFactory, MainframeA
     private fun determineMainClass(): Class<*> {
         return ResolvableType
             .forClass(this::class.java)
-            .`as`(MainframePlugin::class.java)
+            .`as`(VelocityMainframePlugin::class.java)
             .generics
             .single()
             .resolve() ?: error("Unable to resolve plugin class")

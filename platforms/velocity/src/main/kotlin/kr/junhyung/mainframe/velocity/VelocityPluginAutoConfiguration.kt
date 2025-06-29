@@ -30,7 +30,7 @@ public class VelocityPluginAutoConfiguration {
     @Bean
     public fun logger(pluginContainer: PluginContainer): Logger {
         val instance = pluginContainer.instance.get()
-        if (instance !is MainframePlugin<*>) {
+        if (instance !is VelocityMainframePlugin<*>) {
             error("Plugin instance is not a MainframePlugin. Please ensure your plugin extends MainframePlugin.")
         }
         return instance.logger

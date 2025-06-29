@@ -4,7 +4,7 @@ import com.velocitypowered.api.plugin.PluginContainer
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineName
 import kr.junhyung.mainframe.core.coroutines.GracefulShutdownCoroutineScope
-import kr.junhyung.mainframe.velocity.MainframePlugin
+import kr.junhyung.mainframe.velocity.VelocityMainframePlugin
 import org.slf4j.Logger
 import kotlin.coroutines.CoroutineContext
 
@@ -15,7 +15,7 @@ public class VelocityPluginCoroutineScope(
 
     private val pluginLogger by lazy {
         val instance = pluginContainer.instance.get()
-        if (instance !is MainframePlugin<*>) {
+        if (instance !is VelocityMainframePlugin<*>) {
             error("Plugin instance is not of type MainframePlugin")
         }
         instance.logger

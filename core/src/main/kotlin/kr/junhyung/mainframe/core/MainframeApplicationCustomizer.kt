@@ -4,6 +4,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 
 public interface MainframeApplicationCustomizer<T : MainframeApplicationContext> {
 
+    public fun getApplicationContext(): T?
+
     public fun customizeBuilder(builder: SpringApplicationBuilder): SpringApplicationBuilder {
         return builder
     }
