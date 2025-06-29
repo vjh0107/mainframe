@@ -25,6 +25,8 @@ brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier
 
 velocity-api = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity" }
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
+adventure-bom = { group = "net.kyori", name = "adventure-bom", version.ref = "adventure" }
+
 adventure-text-serializer-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
 
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }

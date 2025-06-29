@@ -11,6 +11,7 @@ dependencies {
     api(platform(libs.kotlin.bom))
     api(platform(libs.spring.boot.dependencies))
     api(platform(libs.exposed.bom))
+    api(platform(libs.adventure.bom))
 
     constraints {
         api(libs.mysql.connector)
