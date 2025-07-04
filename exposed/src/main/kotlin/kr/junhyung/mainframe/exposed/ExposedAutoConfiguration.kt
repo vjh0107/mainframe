@@ -27,8 +27,7 @@ public class ExposedAutoConfiguration {
 
     @Bean
     public fun database(dataSource: DataSource): Database {
-        val database = Database.connect(dataSource)
-        return database
+        return Database.connect(dataSource)
     }
 
     @Bean

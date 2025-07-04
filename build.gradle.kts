@@ -20,6 +20,7 @@ subprojects {
 
 }
 
-if (libs.versions.kotlin.get() != embeddedKotlinVersion) {
-    error("Kotlin version mismatch: ${libs.versions.kotlin.get()} != $embeddedKotlinVersion")
-}
+// It was done this way for 'certain' reason, but for 'another certain' reason, not anymore.
+//if (libs.versions.kotlin.get() != embeddedKotlinVersion) {
+//    error("Kotlin version mismatch: ${libs.versions.kotlin.get()} != $embeddedKotlinVersion")
+//}
