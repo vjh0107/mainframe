@@ -1,4 +1,4 @@
-rootProject.name = "mainframe-gradle-plugin"
+rootProject.name = "gradle-plugin"
 
 includeBuild("../build-logic")
 
