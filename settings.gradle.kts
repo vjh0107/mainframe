@@ -1,8 +1,8 @@
 rootProject.name = "mainframe"
 
 includeBuild("build-logic")
+includeBuild("gradle-plugin")
 
-include(":gradle-plugin")
 include(":bom")
 
 include(":core")

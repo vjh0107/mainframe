@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.loadProperties
+
 plugins {
     `kotlin-dsl`
     alias(libs.plugins.plugin.publish)
@@ -12,14 +14,20 @@ dependencies {
     implementation(kotlin("allopen"))
 }
 
+val rootProperties = loadProperties(rootProject.gradle.parent?.rootProject?.projectDir?.path + "/gradle.properties")
+
+group = rootProperties["project.group"].toString()
+version = rootProperties["project.version"].toString()
+description = rootProperties["project.description"].toString()
+
 gradlePlugin {
-    website = property("project.url").toString()
-    vcsUrl = property("project.url.scm").toString()
+    website = rootProperties["project.url"].toString()
+    vcsUrl = rootProperties["project.url.scm"].toString()
     plugins {
         register("mainframe") {
             id = "kr.junhyung.mainframe"
-            displayName = property("project.name").toString()
-            description = property("project.description").toString()
+            displayName = rootProperties["project.name"].toString()
+            description = rootProperties["project.description"].toString()
             implementationClass = "kr.junhyung.mainframe.gradle.MainframePlugin"
             tags.set(listOf("mainframe"))
         }

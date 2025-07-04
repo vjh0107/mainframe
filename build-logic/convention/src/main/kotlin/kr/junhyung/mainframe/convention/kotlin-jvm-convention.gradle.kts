@@ -7,7 +7,9 @@ plugins {
     kotlin("jvm")
 }
 
-apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+runCatching { // Apply the Kotlin Spring plugin if available
+    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+}
 
 configure<KotlinJvmProjectExtension> {
     jvmToolchain(17)

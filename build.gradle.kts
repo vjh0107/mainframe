@@ -17,10 +17,4 @@ subprojects {
             targetCompatibility = JavaVersion.VERSION_17
         }
     }
-
 }
-
-// It was done this way for 'certain' reason, but for 'another certain' reason, not anymore.
-//if (libs.versions.kotlin.get() != embeddedKotlinVersion) {
-//    error("Kotlin version mismatch: ${libs.versions.kotlin.get()} != $embeddedKotlinVersion")
-//}
