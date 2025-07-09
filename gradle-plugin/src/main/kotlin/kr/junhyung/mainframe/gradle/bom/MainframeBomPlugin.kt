@@ -44,7 +44,11 @@ public abstract class MainframeBomPlugin : Plugin<Project> {
     }
 
     private fun getBomVersion(): String {
-        return this::class.java.`package`.implementationVersion ?: error("'implementation-version' not found")
+        val version = this::class.java.`package`.implementationVersion ?: error("'implementation-version' not found")
+        if (version == "unspecified") {
+            error("'implementation-version' is 'unspecified'. Please check the build configuration.")
+        }
+        return version
     }
 
 }

@@ -18,3 +18,14 @@ subprojects {
         }
     }
 }
+
+tasks.register("publish") {
+    val gradlePluginProject = gradle.includedBuild("gradle-plugin")
+    dependsOn(gradlePluginProject.task(":publish"))
+    subprojects.forEach { subproject ->
+        val publishTask = subproject.tasks.findByName("publish")
+        if (publishTask != null) {
+            dependsOn(publishTask)
+        }
+    }
+}
