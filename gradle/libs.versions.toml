@@ -37,6 +37,7 @@ kotlinx-coroutines-reactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 spring-boot-starter = { group = "org.springframework.boot", name = "spring-boot-starter", version.ref = "spring-boot" }
 spring-boot-starter-json = { group = "org.springframework.boot", name = "spring-boot-starter-json", version.ref = "spring-boot" }
 spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc", version.ref = "spring-boot" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "spring-boot" }
 spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
 
 exposed-bom = { group = "org.jetbrains.exposed", name = "exposed-bom", version.ref = "exposed" }
