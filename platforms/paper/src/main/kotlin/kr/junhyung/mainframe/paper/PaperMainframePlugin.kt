@@ -66,7 +66,11 @@ public abstract class PaperMainframePlugin<T> : JavaPlugin(), ApplicationContext
         onApplicationStarted(context.uncheckedCast())
     }
 
+    public open fun onApplicationPreClose() {
+    }
+
     final override fun onDisable() {
+        this.onApplicationPreClose()
         if (this::applicationContext.isInitialized) {
             this.applicationContext.close()
         }
