@@ -15,7 +15,6 @@ public class PaperPluginApplicationContext(private val plugin: Plugin) : Mainfra
         registerPluginBean(beanFactory)
         registerEventHandlerAnnotationProcessor(beanFactory)
         registerServiceAnnotationProcessor(beanFactory)
-        registerSerializers(beanFactory)
     }
 
     private fun registerEventHandlerAnnotationProcessor(beanFactory: ConfigurableListableBeanFactory) {
@@ -30,11 +29,6 @@ public class PaperPluginApplicationContext(private val plugin: Plugin) : Mainfra
 
     private fun registerPluginBean(beanFactory: ConfigurableListableBeanFactory) {
         beanFactory.registerSingleton(plugin.name, plugin)
-    }
-
-    private fun registerSerializers(beanFactory: ConfigurableListableBeanFactory) {
-        beanFactory.registerSingleton("locationSerializer", LocationSerializer())
-        beanFactory.registerSingleton("locationDeserializer", LocationDeserializer(Bukkit.getServer()))
     }
 
 }
