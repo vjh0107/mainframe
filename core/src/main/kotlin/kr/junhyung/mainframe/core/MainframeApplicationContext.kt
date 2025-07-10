@@ -22,7 +22,7 @@ public abstract class MainframeApplicationContext(private val dataDirectory: Fil
     }
 
     final override fun prepareRefresh() {
-        if (getResource("classpath:application.yml").exists()) {
+        if (getResourceByPath("application.yml").exists()) {
             installConfiguration("application.yml")
         }
         super.prepareRefresh()
