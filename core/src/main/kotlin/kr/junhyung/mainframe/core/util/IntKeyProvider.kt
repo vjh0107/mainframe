@@ -1,6 +1,6 @@
 package kr.junhyung.mainframe.core.util
 
-public class IntKeyProvider(override val prefix: String) : IdentifiedKeyProvider<Int> {
+public open class IntKeyProvider(override val prefix: String) : IdentifiedKeyProvider<Int> {
 
     override fun getKey(identifier: Int): String {
         return "$prefix$identifier"
