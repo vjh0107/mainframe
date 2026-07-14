@@ -1,27 +1,45 @@
+import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven
+
 plugins {
     `kotlin-dsl`
-    alias(libs.plugins.plugin.publish)
-    alias(conventions.plugins.kotlin.jvm)
-    alias(conventions.plugins.publishing)
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 dependencies {
-    implementation(libs.shadow)
-    implementation(libs.spring.dependency.management)
-    implementation(kotlin("gradle-plugin"))
-    implementation(kotlin("allopen"))
+    implementation("kr.junhyung.pluginjar:gradle-plugin:1.3.0-SNAPSHOT")
 }
 
 gradlePlugin {
-    website = property("project.url").toString()
-    vcsUrl = property("project.url.scm").toString()
     plugins {
         register("mainframe") {
             id = "kr.junhyung.mainframe"
-            displayName = property("project.name").toString()
-            description = property("project.description").toString()
-            implementationClass = "kr.junhyung.mainframe.gradle.MainframePlugin"
-            tags.set(listOf("mainframe"))
+            implementationClass = "kr.junhyung.mainframe.gradle.MainframeBasePlugin"
         }
+        register("mainframe-paper") {
+            id = "kr.junhyung.mainframe.paper"
+            implementationClass = "kr.junhyung.mainframe.gradle.MainframePaperPlugin"
+        }
+        register("mainframe-velocity") {
+            id = "kr.junhyung.mainframe.velocity"
+            implementationClass = "kr.junhyung.mainframe.gradle.MainframeVelocityPlugin"
+        }
+    }
+}
+
+tasks.named<Jar>("jar") {
+    manifest {
+        attributes(
+            "Implementation-Version" to project.version,
+            "Implementation-Vendor" to project.group,
+        )
+    }
+}
+
+tasks.withType<AbstractPublishToMaven>().configureEach {
+    if (name.startsWith("publishMavenPublication")) {
+        enabled = false
     }
 }

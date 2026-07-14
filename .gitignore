@@ -5,13 +5,16 @@ build/
 !**/src/test/**/build/
 
 ### IntelliJ IDEA ###
-.idea/
+.idea
 *.iws
 *.iml
 *.ipr
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+### Kotlin ###
+.kotlin
 
 ### Eclipse ###
 .apt_generated
@@ -37,6 +40,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
-/test-bukkit
-publication.gradle.kts

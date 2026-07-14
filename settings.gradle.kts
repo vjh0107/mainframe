@@ -1,29 +1,19 @@
 rootProject.name = "mainframe"
 
-includeBuild("build-logic")
-
-include(":gradle-plugin")
 include(":bom")
-
 include(":core")
-include(":exposed")
-include(":brigadier")
-
-include(":paper", file("platforms/paper"))
-include(":paper-brigadier", file("platforms/paper-brigadier"))
-include(":velocity", file("platforms/velocity"))
-
-fun include(name: String, path: File) {
-    include(name)
-    project(name).projectDir = path
-}
+include(":gradle-plugin")
+include(":platform-adventure")
+include(":platform-paper")
+include(":platform-velocity")
 
 pluginManagement {
     repositories {
         maven("https://junhyung.nexus/")
     }
+
     plugins {
-        id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
+        id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     }
 }
 
@@ -35,15 +25,8 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
-        create("conventions") {
-            file("build-logic/convention/src/main/kotlin/kr/junhyung/mainframe/convention").listFiles {
-                    file -> file.name.endsWith(".gradle.kts")
-            }!!.forEach { file ->
-                val pluginName = file.name.removeSuffix(".gradle.kts")
-                plugin(pluginName.removeSuffix("-convention"), "kr.junhyung.mainframe.convention.$pluginName").version("")
-            }
+        create("libs") {
+            version("spring-boot", "4.1.0")
         }
     }
 }
-
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
