@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
+import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -53,8 +54,21 @@ public class MainframePlugin extends JavaPlugin {
             this.applicationContext = ScopedExecutions.withSystemProperty(LOGGING_SYSTEM_PROPERTY, NONE_LOGGING_SYSTEM, () ->
                 ScopedExecutions.withContextClassLoader(getClassLoader(), this::startApplication));
         } catch (Throwable throwable) {
-            logger.error("Failed to start Spring application", throwable);
+            logger.error("Failed to start Spring application, shutting down", throwable);
+            Runtime.getRuntime().halt(exitCodeFor(throwable));
         }
+    }
+
+    private static int exitCodeFor(Throwable failure) {
+        for (Throwable cause = failure; cause != null; cause = cause.getCause()) {
+            if (cause instanceof ExitCodeGenerator generator) {
+                int exitCode = generator.getExitCode();
+                if (exitCode != 0) {
+                    return exitCode;
+                }
+            }
+        }
+        return 1;
     }
 
     private ConfigurableApplicationContext startApplication() {
