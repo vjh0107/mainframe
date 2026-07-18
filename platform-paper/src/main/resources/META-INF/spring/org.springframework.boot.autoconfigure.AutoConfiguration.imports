@@ -1,3 +1,4 @@
 kr.junhyung.mainframe.platform.paper.plugin.MainframePluginAutoConfiguration
 kr.junhyung.mainframe.platform.paper.transaction.MainframeTransactionAutoConfiguration
+kr.junhyung.mainframe.platform.paper.discovery.consul.ConsulGameServerRegistrationAutoConfiguration
 kr.junhyung.mainframe.platform.paper.metrics.PaperMetricsAutoConfiguration
