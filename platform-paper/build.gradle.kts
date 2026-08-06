@@ -15,4 +15,6 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-aspectj")
 
+    testImplementation("io.papermc.paper:paper-api")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
 }

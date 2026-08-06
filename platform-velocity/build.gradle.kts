@@ -11,4 +11,7 @@ dependencies {
     compileOnlyApi("com.velocitypowered:velocity-api")
     compileOnly("org.springframework.cloud:spring-cloud-commons")
     compileOnly("kr.junhyung.pluginjar:velocity-loader:1.3.0-SNAPSHOT")
+
+    testImplementation("com.velocitypowered:velocity-api")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
 }

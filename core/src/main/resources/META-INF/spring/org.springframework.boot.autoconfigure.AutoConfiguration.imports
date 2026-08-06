@@ -1,1 +1,2 @@
 kr.junhyung.mainframe.core.discovery.GameServerDiscoveryAutoConfiguration
+kr.junhyung.mainframe.core.presence.redis.RedisPlayerPresenceAutoConfiguration

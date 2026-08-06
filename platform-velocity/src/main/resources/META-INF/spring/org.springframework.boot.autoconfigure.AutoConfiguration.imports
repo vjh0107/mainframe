@@ -1,3 +1,4 @@
 kr.junhyung.mainframe.platform.velocity.plugin.MainframeVelocityPluginAutoConfiguration
 kr.junhyung.mainframe.platform.velocity.discovery.GameServerRegistrationReconcilerAutoConfiguration
 kr.junhyung.mainframe.platform.velocity.discovery.GameServerRoutingAutoConfiguration
+kr.junhyung.mainframe.platform.velocity.presence.PlayerPresenceReconcilerAutoConfiguration

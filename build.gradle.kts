@@ -15,3 +15,18 @@ subprojects {
     }
 
 }
+
+configure(listOf(project(":core"), project(":platform-adventure"), project(":platform-paper"),
+        project(":platform-velocity"))) {
+    plugins.withId("java-library") {
+        dependencies {
+            "testImplementation"(platform(project(":bom")))
+            "testImplementation"("org.springframework.boot:spring-boot-starter-test")
+            "testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
+        }
+
+        tasks.withType<Test>().configureEach {
+            useJUnitPlatform()
+        }
+    }
+}
