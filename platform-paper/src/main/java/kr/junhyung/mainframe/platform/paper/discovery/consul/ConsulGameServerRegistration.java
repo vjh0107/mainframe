@@ -43,6 +43,8 @@ public class ConsulGameServerRegistration implements SmartLifecycle {
         Map<String, String> metadata = this.registration.getService().getMeta();
         metadata.put(GameServerMetadata.GAME_SERVER, "true");
         metadata.put(GameServerMetadata.ENTRYPOINT, Boolean.toString(properties.isEntrypoint()));
+        metadata.put(GameServerMetadata.DISPLAY_NAME, StringUtils.hasText(properties.getDisplayName())
+                ? properties.getDisplayName() : properties.getServiceName());
     }
 
     @Override

@@ -23,14 +23,8 @@ public class GameServerDiscoveryAutoConfiguration {
     @Bean
     @ConditionalOnBean(GameServerDiscoveryClient.class)
     @ConditionalOnMissingBean
-    public HeartbeatGameServerDiscovery gameServerDiscovery(GameServerDiscoveryClient client) {
-        return new HeartbeatGameServerDiscovery(client);
-    }
-
-    @Bean
-    @ConditionalOnBean(HeartbeatGameServerDiscovery.class)
-    public GameServerDiscoveryReconciler gameServerDiscoveryResync(HeartbeatGameServerDiscovery discovery,
-                                                                   GameServerDiscoveryProperties properties) {
-        return new GameServerDiscoveryReconciler("gameserver-discovery-resync", properties.getResyncInterval(), discovery::refresh);
+    public HeartbeatGameServerDiscovery gameServerDiscovery(GameServerDiscoveryClient client,
+                                                            GameServerDiscoveryProperties properties) {
+        return new HeartbeatGameServerDiscovery(client, properties.getResyncInterval());
     }
 }

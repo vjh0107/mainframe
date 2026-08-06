@@ -13,6 +13,8 @@ public class GameServerDiscoveryProperties {
 
     private String instanceId;
 
+    private String displayName;
+
     private boolean entrypoint = false;
 
     private Duration resyncInterval = Duration.ofSeconds(15);
@@ -31,6 +33,14 @@ public class GameServerDiscoveryProperties {
 
     public void setInstanceId(String instanceId) {
         this.instanceId = instanceId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public boolean isEntrypoint() {

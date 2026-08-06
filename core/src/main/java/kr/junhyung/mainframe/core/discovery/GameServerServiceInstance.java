@@ -29,6 +29,12 @@ public class GameServerServiceInstance implements ServiceInstance {
         return Integer.parseInt(metadata.get(GameServerMetadata.MAX_PLAYERS));
     }
 
+    public String getDisplayName() {
+        Map<String, String> metadata = getMetadata();
+        String displayName = metadata == null ? null : metadata.get(GameServerMetadata.DISPLAY_NAME);
+        return displayName == null || displayName.isBlank() ? getServiceId() : displayName;
+    }
+
     @Override
     public String getInstanceId() {
         return delegate.getInstanceId();
