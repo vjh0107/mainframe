@@ -9,7 +9,7 @@ class PrimaryThreadTransactionExecutionListener implements TransactionExecutionL
 
     @Override
     public void beforeBegin(@NonNull TransactionExecution transaction) {
-        if (Bukkit.isPrimaryThread()) {
+        if (Bukkit.isPrimaryThread() && Bukkit.getCurrentTick() > 0) {
             throw new IllegalStateException(
                     "Transactions must not be started on the Bukkit primary thread. "
                             + "Move the work off the main thread via @Async or a dedicated executor.");

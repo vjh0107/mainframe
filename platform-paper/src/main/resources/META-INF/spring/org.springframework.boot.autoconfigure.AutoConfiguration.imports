@@ -3,3 +3,4 @@ kr.junhyung.mainframe.platform.paper.transaction.MainframeTransactionAutoConfigu
 kr.junhyung.mainframe.platform.paper.discovery.consul.ConsulGameServerRegistrationAutoConfiguration
 kr.junhyung.mainframe.platform.paper.metrics.PaperMetricsAutoConfiguration
 kr.junhyung.mainframe.platform.paper.presence.PlayerPresenceCacheAutoConfiguration
+kr.junhyung.mainframe.platform.paper.nametag.NametagAutoConfiguration

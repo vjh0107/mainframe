@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface PlayerPresenceCommandService {
 
-    void refresh(Map<UUID, String> players);
+    void refresh(Map<UUID, PlayerIdentity> players);
 
     void remove(Collection<UUID> playerIds);
 

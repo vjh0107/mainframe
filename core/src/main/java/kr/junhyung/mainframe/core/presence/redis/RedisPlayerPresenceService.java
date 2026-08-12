@@ -1,6 +1,8 @@
 package kr.junhyung.mainframe.core.presence.redis;
 
+import kr.junhyung.mainframe.core.presence.PlayerIdentity;
 import kr.junhyung.mainframe.core.presence.PlayerPresence;
+import kr.junhyung.mainframe.core.presence.PlayerSkin;
 import kr.junhyung.mainframe.core.presence.PlayerPresenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ class RedisPlayerPresenceService implements PlayerPresenceService, InitializingB
             "kr/junhyung/mainframe/core/presence/redis/sweep.lua";
 
     static final char SEPARATOR = '/';
+    static final char SKIN_SEPARATOR = ';';
 
     private static final Logger log = LoggerFactory.getLogger(RedisPlayerPresenceService.class);
     private static final int BATCH = 500;
@@ -44,9 +47,9 @@ class RedisPlayerPresenceService implements PlayerPresenceService, InitializingB
     private final List<String> keys;
 
     RedisPlayerPresenceService(StringRedisTemplate redis, String key, Duration ttl, String instanceId) {
-        if (instanceId.indexOf(SEPARATOR) >= 0) {
-            throw new IllegalArgumentException(
-                    "Player presence instance id must not contain '" + SEPARATOR + "': " + instanceId);
+        if (instanceId.indexOf(SEPARATOR) >= 0 || instanceId.indexOf(SKIN_SEPARATOR) >= 0) {
+            throw new IllegalArgumentException("Player presence instance id must not contain '" + SEPARATOR
+                    + "' or '" + SKIN_SEPARATOR + "': " + instanceId);
         }
         this.redis = redis;
         this.key = key;
@@ -70,16 +73,16 @@ class RedisPlayerPresenceService implements PlayerPresenceService, InitializingB
     }
 
     @Override
-    public void refresh(Map<UUID, String> players) {
+    public void refresh(Map<UUID, PlayerIdentity> players) {
         if (players.isEmpty()) {
             return;
         }
         String ttlArg = Long.toString(ttl.toSeconds());
         List<String> args = new ArrayList<>();
         args.add(ttlArg);
-        for (Map.Entry<UUID, String> player : players.entrySet()) {
+        for (Map.Entry<UUID, PlayerIdentity> player : players.entrySet()) {
             args.add(player.getKey().toString());
-            args.add(instanceId + SEPARATOR + player.getValue());
+            args.add(encode(player.getValue()));
             if (args.size() > BATCH * 2) {
                 flush(REFRESH, args, ttlArg);
             }
@@ -166,10 +169,23 @@ class RedisPlayerPresenceService implements PlayerPresenceService, InitializingB
                 new ClassPathResource(location, RedisPlayerPresenceService.class.getClassLoader()), Long.class);
     }
 
+    private String encode(PlayerIdentity identity) {
+        String prefix = instanceId + SEPARATOR + identity.username();
+        PlayerSkin skin = identity.skin();
+        return skin == null ? prefix : prefix + SKIN_SEPARATOR + skin.value() + SKIN_SEPARATOR + skin.signature();
+    }
+
     static PlayerPresence parse(UUID playerId, String value) {
         int separator = value.indexOf(SEPARATOR);
-        return separator < 0
-                ? new PlayerPresence(playerId, value, null)
-                : new PlayerPresence(playerId, value.substring(separator + 1), value.substring(0, separator));
+        String owner = separator < 0 ? null : value.substring(0, separator);
+        String remainder = separator < 0 ? value : value.substring(separator + 1);
+        int skinStart = remainder.indexOf(SKIN_SEPARATOR);
+        if (skinStart < 0) {
+            return new PlayerPresence(playerId, remainder, owner, null);
+        }
+        int signatureStart = remainder.indexOf(SKIN_SEPARATOR, skinStart + 1);
+        PlayerSkin skin = new PlayerSkin(remainder.substring(skinStart + 1, signatureStart),
+                remainder.substring(signatureStart + 1));
+        return new PlayerPresence(playerId, remainder.substring(0, skinStart), owner, skin);
     }
 }

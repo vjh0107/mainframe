@@ -6,7 +6,10 @@ import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.util.GameProfile;
+import kr.junhyung.mainframe.core.presence.PlayerIdentity;
 import kr.junhyung.mainframe.core.presence.PlayerPresenceCommandService;
+import kr.junhyung.mainframe.core.presence.PlayerSkin;
 import kr.junhyung.mainframe.core.scheduling.AbstractScheduledLifecycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +48,7 @@ public class PlayerPresenceReconciler extends AbstractScheduledLifecycle {
     @Override
     protected void runOnce() {
         presence.refresh(proxyServer.getAllPlayers().stream()
-                .collect(Collectors.toMap(Player::getUniqueId, Player::getUsername)));
+                .collect(Collectors.toMap(Player::getUniqueId, PlayerPresenceReconciler::identityOf)));
         sweep();
     }
 
@@ -59,7 +62,7 @@ public class PlayerPresenceReconciler extends AbstractScheduledLifecycle {
     public void onPostLogin(PostLoginEvent event) {
         Player player = event.getPlayer();
         try {
-            presence.refresh(Map.of(player.getUniqueId(), player.getUsername()));
+            presence.refresh(Map.of(player.getUniqueId(), identityOf(player)));
         } catch (RuntimeException e) {
             log.error("Failed to record presence for {}", player.getUsername(), e);
         }
@@ -73,6 +76,19 @@ public class PlayerPresenceReconciler extends AbstractScheduledLifecycle {
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
         remove(proxyServer.getAllPlayers().stream().map(Player::getUniqueId).toList());
+    }
+
+    private static PlayerIdentity identityOf(Player player) {
+        return new PlayerIdentity(player.getUsername(), skinOf(player));
+    }
+
+    private static PlayerSkin skinOf(Player player) {
+        for (GameProfile.Property property : player.getGameProfile().getProperties()) {
+            if ("textures".equals(property.getName()) && property.getSignature() != null) {
+                return new PlayerSkin(property.getValue(), property.getSignature());
+            }
+        }
+        return null;
     }
 
     private void sweep() {

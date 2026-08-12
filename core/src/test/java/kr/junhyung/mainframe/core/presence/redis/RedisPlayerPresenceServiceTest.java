@@ -1,7 +1,9 @@
 package kr.junhyung.mainframe.core.presence.redis;
 
 import com.redis.testcontainers.RedisContainer;
+import kr.junhyung.mainframe.core.presence.PlayerIdentity;
 import kr.junhyung.mainframe.core.presence.PlayerPresence;
+import kr.junhyung.mainframe.core.presence.PlayerSkin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -48,7 +50,7 @@ class RedisPlayerPresenceServiceTest {
     @Test
     void refreshedPlayersAreOnlineWithTheirProxy() {
         UUID player = UUID.randomUUID();
-        alpha.refresh(Map.of(player, "alice"));
+        alpha.refresh(Map.of(player, identity("alice")));
 
         assertThat(alpha.isOnline(player)).isTrue();
         assertThat(alpha.count()).isEqualTo(1);
@@ -56,8 +58,22 @@ class RedisPlayerPresenceServiceTest {
     }
 
     @Test
+    void skinsSurviveTheRoundTripDespiteBase64Separators() {
+        UUID player = UUID.randomUUID();
+        PlayerSkin skin = new PlayerSkin("ey/JICAidGltZXN0YW1w+In0=", "D24y/zbg+aBETxe5e/acQ==");
+        alpha.refresh(Map.of(player, new PlayerIdentity("alice", skin)));
+
+        assertThat(alpha.find(player)).hasValueSatisfying(presence -> {
+            assertThat(presence.username()).isEqualTo("alice");
+            assertThat(presence.instanceId()).isEqualTo("proxy-alpha");
+            assertThat(presence.skin()).isEqualTo(skin);
+        });
+    }
+
+    @Test
     void everyRefreshLeavesATtlOnEveryField() {
-        Map<UUID, String> players = Map.of(UUID.randomUUID(), "alice", UUID.randomUUID(), "bob");
+        Map<UUID, PlayerIdentity> players = Map.of(UUID.randomUUID(), identity("alice"),
+                UUID.randomUUID(), identity("bob"));
         alpha.refresh(players);
         alpha.refresh(players);
 
@@ -69,11 +85,11 @@ class RedisPlayerPresenceServiceTest {
     void expiresPerFieldSoOneProxyDyingLeavesTheOthers() {
         UUID crashed = UUID.randomUUID();
         UUID alive = UUID.randomUUID();
-        alpha.refresh(Map.of(crashed, "crashed"));
-        beta.refresh(Map.of(alive, "alive"));
+        alpha.refresh(Map.of(crashed, identity("crashed")));
+        beta.refresh(Map.of(alive, identity("alive")));
 
         await().pollInterval(Duration.ofMillis(200)).atMost(TTL.plusSeconds(3)).untilAsserted(() -> {
-            beta.refresh(Map.of(alive, "alive"));
+            beta.refresh(Map.of(alive, identity("alive")));
             assertThat(beta.isOnline(crashed)).isFalse();
         });
         assertThat(beta.isOnline(alive)).isTrue();
@@ -82,7 +98,7 @@ class RedisPlayerPresenceServiceTest {
     @Test
     void removeOnlyTouchesOwnPlayers() {
         UUID player = UUID.randomUUID();
-        beta.refresh(Map.of(player, "alice"));
+        beta.refresh(Map.of(player, identity("alice")));
 
         alpha.remove(List.of(player));
 
@@ -92,7 +108,7 @@ class RedisPlayerPresenceServiceTest {
     @Test
     void removeDropsOwnPlayersImmediately() {
         UUID player = UUID.randomUUID();
-        alpha.refresh(Map.of(player, "alice"));
+        alpha.refresh(Map.of(player, identity("alice")));
 
         alpha.remove(List.of(player));
 
@@ -104,7 +120,7 @@ class RedisPlayerPresenceServiceTest {
         UUID ghost = UUID.randomUUID();
         UUID live = UUID.randomUUID();
         redis.opsForHash().put(KEY, ghost.toString(), "proxy-dead/ghost");
-        alpha.refresh(Map.of(live, "alice"));
+        alpha.refresh(Map.of(live, identity("alice")));
 
         assertThat(alpha.sweepUnexpiring()).isEqualTo(1);
         assertThat(alpha.isOnline(ghost)).isFalse();
@@ -113,14 +129,18 @@ class RedisPlayerPresenceServiceTest {
 
     @Test
     void refreshBeyondOneBatchStillExpires() {
-        Map<UUID, String> players = new java.util.HashMap<>();
+        Map<UUID, PlayerIdentity> players = new java.util.HashMap<>();
         for (int i = 0; i < 1200; i++) {
-            players.put(UUID.randomUUID(), "player" + i);
+            players.put(UUID.randomUUID(), identity("player" + i));
         }
         alpha.refresh(players);
 
         assertThat(alpha.count()).isEqualTo(1200);
         assertThat(alpha.sweepUnexpiring()).isZero();
+    }
+
+    private PlayerIdentity identity(String username) {
+        return new PlayerIdentity(username, null);
     }
 
     private List<Long> ttls(List<String> fields) {
