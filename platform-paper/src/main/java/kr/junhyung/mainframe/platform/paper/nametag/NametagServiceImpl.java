@@ -261,6 +261,11 @@ class NametagServiceImpl implements NametagService, NametagPassengers {
         return ids;
     }
 
+    @Override
+    public void remount(Entity subject) {
+        reattach(subject);
+    }
+
     private NametagInstance instanceOf(int entityId) {
         return instances.values().stream()
                 .filter(instance -> instance.subject().getEntityId() == entityId)

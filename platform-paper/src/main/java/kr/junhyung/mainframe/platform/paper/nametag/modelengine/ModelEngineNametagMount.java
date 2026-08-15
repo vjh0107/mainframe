@@ -52,6 +52,7 @@ class ModelEngineNametagMount implements Listener {
 
     private void detach(Entity subject) {
         override(subject).ifPresent(override -> passengers.of(subject).forEach(override::removePassenger));
+        passengers.remount(subject);
     }
 
     private Optional<PivotOverride> override(Entity subject) {
