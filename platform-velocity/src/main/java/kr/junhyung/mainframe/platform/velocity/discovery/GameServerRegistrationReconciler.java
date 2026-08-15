@@ -31,6 +31,10 @@ public class GameServerRegistrationReconciler extends AbstractScheduledLifecycle
         this.discovery = discovery;
     }
 
+    @Override
+    protected Duration initialDelay() {
+        return Duration.ZERO;
+    }
 
     @Override
     protected void runOnce() {
