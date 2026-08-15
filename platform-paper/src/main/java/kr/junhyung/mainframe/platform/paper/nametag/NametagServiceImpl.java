@@ -120,7 +120,7 @@ class NametagServiceImpl implements NametagService, NametagPassengers {
         int recovery = recoveries.merge(id, 1, Integer::sum);
         for (long delay : RECOVERY_DELAYS) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (recoveries.getOrDefault(id, recovery) == recovery) {
+                if (recoveries.getOrDefault(id, 0) == recovery) {
                     viewers(subject).forEach(viewer -> attach(instance, viewer));
                 }
             }, delay);
