@@ -82,7 +82,8 @@ class NametagHandler implements Listener {
         if (!(event.getEntity() instanceof Player player) || !isInvisibility(event)) {
             return;
         }
-        if (event.getAction() == EntityPotionEffectEvent.Action.ADDED) {
+        if (event.getAction() == EntityPotionEffectEvent.Action.ADDED
+                || event.getAction() == EntityPotionEffectEvent.Action.CHANGED) {
             service.block(player);
         } else {
             service.unblock(player);

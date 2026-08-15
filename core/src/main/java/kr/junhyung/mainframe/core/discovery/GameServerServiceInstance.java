@@ -26,7 +26,15 @@ public class GameServerServiceInstance implements ServiceInstance {
         if (metadata == null) {
             return 0;
         }
-        return Integer.parseInt(metadata.get(GameServerMetadata.MAX_PLAYERS));
+        String maxPlayers = metadata.get(GameServerMetadata.MAX_PLAYERS);
+        if (maxPlayers == null || maxPlayers.isBlank()) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(maxPlayers);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     public String getDisplayName() {

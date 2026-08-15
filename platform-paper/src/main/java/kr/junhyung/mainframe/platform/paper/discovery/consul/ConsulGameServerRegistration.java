@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,10 @@ public class ConsulGameServerRegistration implements SmartLifecycle {
         this.registration = ConsulAutoRegistration.registration(autoServiceRegistrationProperties, discoveryProperties,
                 applicationContext, registrationCustomizers, List.of(), heartbeatProperties);
         Map<String, String> metadata = this.registration.getService().getMeta();
+        if (metadata == null) {
+            metadata = new HashMap<>();
+            this.registration.getService().setMeta(metadata);
+        }
         metadata.put(GameServerMetadata.GAME_SERVER, "true");
         metadata.put(GameServerMetadata.ENTRYPOINT, Boolean.toString(properties.isEntrypoint()));
         metadata.put(GameServerMetadata.DISPLAY_NAME, StringUtils.hasText(properties.getDisplayName())

@@ -33,6 +33,7 @@ public class GameServerDiscoveryClient {
     }
 
     private static boolean isGameServer(ServiceInstance instance) {
-        return Boolean.parseBoolean(instance.getMetadata().get(GameServerMetadata.GAME_SERVER));
+        Map<String, String> metadata = instance.getMetadata();
+        return metadata != null && Boolean.parseBoolean(metadata.get(GameServerMetadata.GAME_SERVER));
     }
 }
