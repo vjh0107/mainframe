@@ -12,6 +12,7 @@ dependencies {
     compileOnly("org.springframework:spring-tx")
     compileOnly("org.springframework.cloud:spring-cloud-starter-consul-discovery")
     compileOnly("org.springframework.boot:spring-boot-starter-micrometer-metrics")
+    compileOnly("com.ticxo.modelengine:ModelEngine:R4.1.1")
 
     implementation("org.springframework.boot:spring-boot-starter-aspectj")
 

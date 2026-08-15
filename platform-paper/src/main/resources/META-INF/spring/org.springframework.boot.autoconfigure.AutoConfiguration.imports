@@ -4,3 +4,4 @@ kr.junhyung.mainframe.platform.paper.discovery.consul.ConsulGameServerRegistrati
 kr.junhyung.mainframe.platform.paper.metrics.PaperMetricsAutoConfiguration
 kr.junhyung.mainframe.platform.paper.presence.PlayerPresenceCacheAutoConfiguration
 kr.junhyung.mainframe.platform.paper.nametag.NametagAutoConfiguration
+kr.junhyung.mainframe.platform.paper.nametag.modelengine.ModelEngineNametagAutoConfiguration

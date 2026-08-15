@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-class NametagServiceImpl implements NametagService {
+class NametagServiceImpl implements NametagService, NametagPassengers {
 
     private static final long ATTACH_DELAY = 1L;
     private static final long CAMERA_RECOVERY_DELAY = 1L;
@@ -240,6 +240,25 @@ class NametagServiceImpl implements NametagService {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<Integer> of(Entity subject) {
+        NametagInstance instance = instances.get(subject.getUniqueId());
+        if (instance == null || blocked.contains(subject.getUniqueId())) {
+            return List.of();
+        }
+        List<Integer> ids = new ArrayList<>();
+        for (Nametag nametag : nametags.values()) {
+            if (!nametag.appliesTo(subject)) {
+                continue;
+            }
+            Hologram hologram = instance.existing(nametag.id());
+            if (hologram != null) {
+                ids.add(hologram.entityId());
+            }
+        }
+        return ids;
     }
 
     private NametagInstance instanceOf(int entityId) {
