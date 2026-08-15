@@ -263,7 +263,22 @@ class NametagServiceImpl implements NametagService, NametagPassengers {
 
     @Override
     public void remount(Entity subject) {
+        NametagInstance instance = instances.get(subject.getUniqueId());
+        if (instance == null) {
+            return;
+        }
+        viewers(subject).forEach(viewer -> attachNow(instance, viewer));
         reattach(subject);
+    }
+
+    private void attachNow(NametagInstance instance, Player viewer) {
+        if (blocked.contains(instance.subject().getUniqueId())) {
+            return;
+        }
+        List<Nametag> shown = shownTo(instance.subject(), viewer);
+        if (!shown.isEmpty()) {
+            NametagInstance.send(viewer, instance.attach(shown, viewer));
+        }
     }
 
     private NametagInstance instanceOf(int entityId) {
