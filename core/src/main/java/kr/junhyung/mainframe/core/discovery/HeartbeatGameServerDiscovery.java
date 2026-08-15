@@ -33,6 +33,11 @@ public class HeartbeatGameServerDiscovery extends AbstractScheduledLifecycle imp
     }
 
     @Override
+    protected Duration initialDelay() {
+        return Duration.ZERO;
+    }
+
+    @Override
     protected void runOnce() {
         refresh();
     }
