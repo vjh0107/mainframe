@@ -8,12 +8,11 @@ import com.ticxo.modelengine.api.model.PivotOverride;
 import kr.junhyung.mainframe.platform.paper.nametag.NametagPassengers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-
-import java.util.Optional;
 
 class ModelEngineNametagMount implements Listener {
 
@@ -28,9 +27,11 @@ class ModelEngineNametagMount implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAddModel(AddModelEvent event) {
         Entity subject = subjectOf(event.getTarget());
-        if (subject != null) {
-            Bukkit.getScheduler().runTask(plugin, () -> attach(subject));
+        if (!(subject instanceof Player)) {
+            return;
         }
+        attach(subject);
+        Bukkit.getScheduler().runTask(plugin, () -> attach(subject));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -47,14 +48,11 @@ class ModelEngineNametagMount implements Listener {
     }
 
     private void attach(Entity subject) {
-        override(subject).ifPresent(override -> passengers.of(subject).forEach(override::addPassenger));
+        PivotOverride override = ModelEngineAPI.getPivotOverrideRegistry().getOrCreate(subject);
+        passengers.of(subject).forEach(override::addPassenger);
     }
 
     private void detach(Entity subject) {
         passengers.remount(subject);
-    }
-
-    private Optional<PivotOverride> override(Entity subject) {
-        return ModelEngineAPI.getPivotOverrideRegistry().get(subject.getUniqueId());
     }
 }
