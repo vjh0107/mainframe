@@ -1,5 +1,6 @@
 package kr.junhyung.mainframe.platform.paper.nametag;
 
+import kr.junhyung.mainframe.platform.paper.disguise.DisguisePassengers;
 import kr.junhyung.mainframe.platform.paper.hologram.Hologram;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -17,7 +18,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-class NametagServiceImpl implements NametagService, NametagPassengers {
+class NametagServiceImpl implements NametagService, DisguisePassengers {
 
     private static final long ATTACH_DELAY = 1L;
     private static final long CAMERA_RECOVERY_DELAY = 1L;
