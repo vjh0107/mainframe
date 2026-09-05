@@ -2,5 +2,3 @@ kr.junhyung.mainframe.platform.paper.plugin.MainframePluginAutoConfiguration
 kr.junhyung.mainframe.platform.paper.transaction.MainframeTransactionAutoConfiguration
 kr.junhyung.mainframe.platform.paper.metrics.PaperMetricsAutoConfiguration
 kr.junhyung.mainframe.platform.paper.presence.PlayerPresenceCacheAutoConfiguration
-kr.junhyung.mainframe.platform.paper.nametag.NametagAutoConfiguration
-kr.junhyung.mainframe.platform.paper.modelengine.disguise.ModelEngineDisguiseAutoConfiguration
