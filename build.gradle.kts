@@ -6,6 +6,10 @@ plugins {
 subprojects {
     apply(plugin = "kr.junhyung.publishing")
 
+    tasks.withType<JavaCompile>().configureEach {
+        options.release.set(21)
+    }
+
     publishing {
         publications.withType<MavenPublication>().configureEach {
             if (!name.endsWith("PluginMarkerMaven")) {

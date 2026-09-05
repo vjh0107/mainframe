@@ -12,10 +12,7 @@ dependencies {
     api(platform("net.kyori:adventure-bom:4.26.1"))
 
     constraints {
-        val paperVersion = "26.1.2.build.70-stable"
-        api("io.papermc.paper:paper-api:$paperVersion")
-        api("kr.junhyung.papermc:paper-impl:$paperVersion")
-
+        api("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
         api("com.velocitypowered:velocity-api:3.5.0-SNAPSHOT")
 
         api(project(":core"))
