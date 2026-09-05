@@ -5,6 +5,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import kr.junhyung.mainframe.core.util.ScopedExecutions;
 import org.slf4j.Logger;
 import org.springframework.boot.Banner;
+import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
@@ -34,19 +35,37 @@ final class MainframeVelocityApplication {
                              PluginContainer pluginContainer,
                              Logger logger,
                              Path dataDirectory) {
-        Class<?> applicationClass = resolveApplicationClass();
-        ClassLoader classLoader = MainframeVelocityApplication.class.getClassLoader();
-        ResourceLoader resourceLoader = new DefaultResourceLoader(classLoader);
-        return ScopedExecutions.withSystemProperty(LOGGING_SYSTEM_PROPERTY, NONE_LOGGING_SYSTEM, () ->
-            ScopedExecutions.withContextClassLoader(classLoader, () ->
-                new SpringApplicationBuilder()
-                    .sources(applicationClass)
-                    .bannerMode(Banner.Mode.LOG)
-                    .resourceLoader(resourceLoader)
-                    .headless(true)
-                    .registerShutdownHook(false)
-                    .initializers(new MainframeVelocityPluginApplicationContextInitializer(plugin, proxyServer, pluginContainer, logger, dataDirectory))
-                    .run()));
+        try {
+            Class<?> applicationClass = resolveApplicationClass();
+            ClassLoader classLoader = MainframeVelocityApplication.class.getClassLoader();
+            ResourceLoader resourceLoader = new DefaultResourceLoader(classLoader);
+            return ScopedExecutions.withSystemProperty(LOGGING_SYSTEM_PROPERTY, NONE_LOGGING_SYSTEM, () ->
+                ScopedExecutions.withContextClassLoader(classLoader, () ->
+                    new SpringApplicationBuilder()
+                        .sources(applicationClass)
+                        .bannerMode(Banner.Mode.LOG)
+                        .resourceLoader(resourceLoader)
+                        .headless(true)
+                        .registerShutdownHook(false)
+                        .initializers(new MainframeVelocityPluginApplicationContextInitializer(plugin, proxyServer, pluginContainer, logger, dataDirectory))
+                        .run()));
+        } catch (Throwable throwable) {
+            logger.error("Failed to start Spring application, shutting down", throwable);
+            Runtime.getRuntime().halt(exitCodeFor(throwable));
+            throw new IllegalStateException(throwable);
+        }
+    }
+
+    private static int exitCodeFor(Throwable failure) {
+        for (Throwable cause = failure; cause != null; cause = cause.getCause()) {
+            if (cause instanceof ExitCodeGenerator generator) {
+                int exitCode = generator.getExitCode();
+                if (exitCode != 0) {
+                    return exitCode;
+                }
+            }
+        }
+        return 1;
     }
 
     private static Class<?> resolveApplicationClass() {

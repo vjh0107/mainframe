@@ -10,6 +10,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import kr.junhyung.pluginjar.velocity.VelocityLibraryLoader;
 import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 /**
@@ -43,10 +44,12 @@ public class MainframeVelocityPlugin {
     public void onProxyInitialize(ProxyInitializeEvent event) {
         try {
             VelocityLibraryLoader.load(proxyServer.getPluginManager(), pluginContainer);
-            this.applicationContext = MainframeVelocityApplication.run(this, proxyServer, pluginContainer, logger, dataDirectory);
-        } catch (Throwable throwable) {
-            logger.error("Failed to start Spring application", throwable);
+        } catch (IOException exception) {
+            logger.error("Failed to load plugin libraries, shutting down", exception);
+            Runtime.getRuntime().halt(1);
+            return;
         }
+        this.applicationContext = MainframeVelocityApplication.run(this, proxyServer, pluginContainer, logger, dataDirectory);
     }
 
     @Subscribe
